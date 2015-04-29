@@ -54,6 +54,7 @@
 #endif
 
 namespace xw { namespace md {
+/*
 
     int ram_dmp() {
 
@@ -74,20 +75,7 @@ namespace xw { namespace md {
                         printf("\nN %15lx:%15lx\t%15lx %c%c%c\t%15ld:%15ld\t%15ld", rlower, rupper, rupper - rlower, r , w, x , rlower, rupper, (rupper - rlower) / (1024 * 1024) );
                         //next free
                         free = rupper;
-                        // Check whether we're IN THERE!
 
-                        /*
-                        if (laddr >= rlower && laddr < rupper) {
-                            fclose(pF);
-                            *bits = 0;
-                            if (r == 'r')
-                                *bits |= SH_MEM_READ;
-                            if (w == 'w')
-                                *bits |= SH_MEM_WRITE;
-                            if (x == 'x')
-                                *bits |= SH_MEM_EXEC;
-                            return true;
-                        }*/
                         // Read to end of line
                         int c;
                         while ((c = fgetc(pF)) != '\n') {
@@ -106,6 +94,8 @@ namespace xw { namespace md {
 
         return 0;
     }
+
+    */
 
 
     typedef xw::cntrs::bit_array_vm_alloc_t bit_set_t;
@@ -311,85 +301,6 @@ namespace xw { namespace md {
                     }
                 }
             }
-
-
-            /*
-            void* lastFound = NULL;
-            size_t lastSize = 0;
-
-            // Start by reserving large blocks of address space, and then
-            // gradually reduce the size in order to capture all of the
-            // fragments. Technically we should continue down to 64 KB but
-            // stopping at 1 MB is sufficient to keep most allocators out.
-
-
-
-
-            for (size_t size = 2048 * oneMB; size >= minBlkSize && reservedSize < MEMCORE_MAX_HEAP_SIZE; size /= 2)
-            {
-                for (;;)
-                {
-                    XW_SCP_LOG_TRACE("Try to reserve block of -> " << size << " bytes from: " << addressHint);
-
-                    size_t lastReserved = 0;
-                    void* p = xw::os::vm_reserve_31_bit((void*)addressHint, size, lastReserved, MEMCORE_MAX_HEAP_SIZE - reservedSize); 
-
-                    if (p == INVALID_PTR){
-                        XW_SCP_LOG_TRACE("Reserving block of " << size << " form " << addressHint << " failed!");
-                        break;
-                    }
-                    
-
-                    //we will save block only if not adjacent
-                    if(lastFound != NULL && (size_t)p == (size_t)lastFound + lastSize){
-                        //connect to actual
-                        XW_SCP_LOG_TRACE("Connecting block to precedent! increasing size by: " << lastReserved);
-                        lastSize += lastReserved;
-                    }else{
-                        //save old and set new one found 
-                        
-                        //if old exist save it
-                        if(lastFound != NULL && lastSize > 0){
-                            //we have old block not continuable so save it
-                            XW_SCP_LOG_TRACE("Save reserved block -> " << lastSize << " at " << (size_t)lastFound );
-                            _blocks.push_back(new __mem_block(lastFound, lastSize / _pageSize, _pageSize));
-                        }
-                       
-                        //set last found
-                        lastFound = p;
-                        lastSize = lastReserved;
-                        XW_SCP_LOG_TRACE("Start reserving block -> " << lastSize << " at " << (size_t)lastFound );
-                    }
-
-                    //size check increment it anyway
-                    reservedSize += lastReserved;
-
-                    
-                    if(reservedSize >= MEMCORE_MAX_HEAP_SIZE){
-                         XW_SCP_LOG_TRACE("Done for done!");
-                        break; // we are done
-                    }
-
-                    //adjust address hint
-                    addressHint = (size_t)p + lastReserved;
-                }
-
-                //check if we are over possible space
-                if(((size_t)addressHint & 0xFFFFFFFF80000000) != 0){
-                    XW_SCP_LOG_TRACE("Done for upper limit!");
-                    break; //we have no more space under 2^31
-                }
-            }
-
-            //we have to save last one open, this is just paranoid, but we should not have any more blocks started
-            if(lastFound != NULL && lastSize > 0){
-                XW_SCP_LOG_TRACE("Save last started block -> " << lastSize << " at " << (size_t)lastFound);
-                _blocks.push_back(new __mem_block(lastFound, lastSize / _pageSize, _pageSize));
-                //reset it
-                lastFound = NULL;
-                lastSize = 0;
-            }
-            */
 
             //total reserved ram
             XW_SCP_LOG_TRACE("Reserved ram -> " << reservedSize << " in " << (size_t)_blocks.size() << " blocks.");

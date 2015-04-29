@@ -28,12 +28,12 @@ I work with luajit managed by luadist great project.
 
 Install:
  
-1: Build libvmm using CMake, it depends on boost ( maby ill remove it with time, 
+1. Build libvmm using CMake, it depends on boost ( maby ill remove it with time, 
    im used to use boost for anything, well I'll see ....)
-2: clone luajit from https://github.com/LuaDist/luajit.git
-3: comy my files into sources of it
-4: build it.
-5: test it with test/L.lua (I took it from somwher ein the net, its mindless but it sucks allot of ram :)
+2. clone luajit from https://github.com/LuaDist/luajit.git
+3. comy my files into sources of it
+4. build it.
+5. test it with test/L.lua (I took it from somwher ein the net, its mindless but it sucks allot of ram :)
 
 If you need help contact me: ladislav.sopko@gmail.com
 

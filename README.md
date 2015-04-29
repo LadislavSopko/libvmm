@@ -12,7 +12,7 @@ I used this aproach:
 - Commit / Decommit of ram pages when luajit ask for ram
 
 Libvmm use page labeling in pages arena. For help to do it fast I use bit_array ported form code of Isaac Turner (url: https://github.com/noporpoise/BitArray/) I adapt it and port to windows just what I need. 
-Using this method I have also full supporto for mmremap on windows.
+Using this method I have also full support for mmremap on windows.
 
 Platforms: 
 

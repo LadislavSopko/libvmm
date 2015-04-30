@@ -1,5 +1,4 @@
 cmake_minimum_required (VERSION 3.1)
-set (CMAKE_BACKWARDS_COMPATIBILITY 3.1)
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 project(libvmm CXX)

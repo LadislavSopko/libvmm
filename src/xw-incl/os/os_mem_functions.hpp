@@ -23,7 +23,17 @@
 # define EOF (-1)
 #endif
 
-#define LAST_MAPPABLE_ADDRESS_31BIT 0x7FFFFFFFull;
+
+#if defined(__LIMIT_TO_31_bit__)
+    //31bit
+    #define POINTER_LIMITING_MASK   0xFFFFFFFF80000000ull
+    #define LAST_MAPPABLE_ADDRESS   0x7FFFFFFFull
+#else
+    //32bit
+    #define POINTER_LIMITING_MASK   0xFFFFFFFF00000000ull
+    #define LAST_MAPPABLE_ADDRESS   0xFFFFFFFFull
+#endif
+
 
 namespace xw { namespace os {
     
@@ -89,7 +99,7 @@ namespace xw { namespace os {
         // we have to align starting address to the next allocation unit boundary so
         // we will not hit precedent region, but this must be don if we are not already on
         // allocation region boundary
-        inline void* windows_get_first_free_block_31bit(void* addressHint, size_t& size, size_t maxSize){
+        inline void* windows_get_first_free_block_limited(void* addressHint, size_t& size, size_t maxSize){
 
             static size_t vas_alloc_unit_size = 0;
             static size_t hi_mask = 0;
@@ -108,7 +118,7 @@ namespace xw { namespace os {
 
             MEMORY_BASIC_INFORMATION mbi;
             void* current = addressHint!= NULL ? addressHint : (void*)0x00ull; // first available address 0
-            while((((size_t)current) & 0xFFFFFFFF80000000) == 0 && (((size_t)current + size) & 0xFFFFFFFF80000000) == 0){
+            while((((size_t)current) & POINTER_LIMITING_MASK) == 0 && (((size_t)current + size) & POINTER_LIMITING_MASK) == 0){
                 if(VirtualQuery(current, &mbi, sizeof(mbi))){
                     // now check if there is MEM_FREE
                     if(mbi.State == MEM_FREE && mbi.RegionSize >= size){
@@ -124,9 +134,9 @@ namespace xw { namespace os {
                         // recheck size, cause start can be moved
                         if(mbi.RegionSize - adjust >= size){
                             // paranoid control for to be sure address is max 31 bit wide
-                            if((((size_t)p) & 0xFFFFFFFF80000000) == 0 && (((size_t)p + size) & 0xFFFFFFFF80000000) == 0){
+                            if((((size_t)p) & POINTER_LIMITING_MASK) == 0 && (((size_t)p + size) & POINTER_LIMITING_MASK) == 0){
                                 // check that region size is not over max possible address
-                                size_t maxAvailable = 0x80000000ull - (size_t)p;
+                                size_t maxAvailable = LAST_MAPPABLE_ADDRESS - (size_t)p;
                                 // consider max wanted
                                 size_t maxWanted = maxSize > maxAvailable ? maxAvailable : maxSize; 
                                 // consider free space
@@ -154,7 +164,7 @@ namespace xw { namespace os {
         }
 #else
         //parse "/proc/self/maps" and detect spaces between lines :)
-        inline void* linux_get_first_free_block_31bit(void* addressHint, size_t& size, size_t maxSize) {
+        inline void* linux_get_first_free_block_limited(void* addressHint, size_t& size, size_t maxSize) {
 
             static size_t vas_alloc_unit_size = 0;
             static size_t hi_mask = 0;
@@ -165,7 +175,7 @@ namespace xw { namespace os {
                vas_alloc_unit_size = getpagesize();
                 hi_mask = -1 * vas_alloc_unit_size;
                 lo_mask = ~hi_mask;
-                last_mappable_address = LAST_MAPPABLE_ADDRESS_31BIT & hi_mask;
+                last_mappable_address = LAST_MAPPABLE_ADDRESS & hi_mask;
             }
             //align sizes up
             size = (hi_mask & size) + ((size & lo_mask) != 0 ? vas_alloc_unit_size : 0);
@@ -176,7 +186,7 @@ namespace xw { namespace os {
             maxSize = maxSize > size ? maxSize : size;
 
             //we are out of possible address space
-            if((((size_t)addressHint) & 0xFFFFFFFF80000000) != 0 || (((size_t)addressHint + size) & 0xFFFFFFFF80000000) != 0){
+            if((((size_t)addressHint) & POINTER_LIMITING_MASK) != 0 || (((size_t)addressHint + size) & POINTER_LIMITING_MASK) != 0){
                 return (size = 0, (void*)NULL);
             }
 
@@ -194,7 +204,7 @@ namespace xw { namespace os {
                     //check if space is enough
                     if(rlower > current && rlower - current >= size ){
                         //we have block but adjust sizes so we don't go out of 31bit address space
-                        if((current & 0xFFFFFFFF80000000) == 0 && ((current + size) & 0xFFFFFFFF80000000) == 0){
+                        if((current & POINTER_LIMITING_MASK) == 0 && ((current + size) & POINTER_LIMITING_MASK) == 0){
                             // check that region size is not over max possible address
                             size_t maxAvailable = last_mappable_address - current;
                             // consider max wanted
@@ -298,7 +308,7 @@ namespace xw { namespace os {
     }
 
 
-    inline void* vm_reserve_31_bit(void* address_hint, size_t size, size_t& allocated, size_t maxSize = 0){
+    inline void* vm_reserve_limited(void* address_hint, size_t size, size_t& allocated, size_t maxSize = 0){
         void* p = INVALID_PTR;
 
         // take max
@@ -307,7 +317,7 @@ namespace xw { namespace os {
 #ifndef HW_UNIX
         size_t availableSize = size;
         //lets look for possible VAS big at least size bytes
-        void* addressHint = dtl::windows_get_first_free_block_31bit(address_hint, availableSize, maxSize);
+        void* addressHint = dtl::windows_get_first_free_block_limited(address_hint, availableSize, maxSize);
         if(addressHint == NULL){
             //not enough space for wanted size
             return (allocated = 0, INVALID_PTR);
@@ -326,7 +336,7 @@ namespace xw { namespace os {
 #else
         size_t availableSize = size;
         //lets look for possible VAS big at least size bytes
-        void* addressHint = dtl::linux_get_first_free_block_31bit(address_hint, availableSize, maxSize);
+        void* addressHint = dtl::linux_get_first_free_block_limited(address_hint, availableSize, maxSize);
         if(addressHint == NULL){
             //not enough space for wanted size
             return (allocated = 0, INVALID_PTR);
@@ -343,7 +353,7 @@ namespace xw { namespace os {
             return (allocated = 0, p);
         }
         //paranoid control for to be sure address is max 31 bit wide
-        if((((size_t)p) & 0xFFFFFFFF80000000) != 0 || (((size_t)p + size) & 0xFFFFFFFF80000000) != 0) 
+        if((((size_t)p) & POINTER_LIMITING_MASK) != 0 || (((size_t)p + size) & POINTER_LIMITING_MASK) != 0)
         {
             // We don't need this memory, so release it completely.
 #ifndef HW_UNIX

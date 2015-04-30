@@ -18,12 +18,8 @@
 #include <vector>
 #include <string.h>
 
-//1GB
-//#define MEMCORE_MAX_HEAP_SIZE 1073741824
-//2GB
-#define MEMCORE_MAX_HEAP_SIZE 2147483648
-//1.5GB
-//#define MEMCORE_MAX_HEAP_SIZE 1610612736
+//3.5GB
+#define MEMCORE_MAX_HEAP_SIZE 0xE0000000ull
 
 //#define __xw__logign__
 
@@ -272,22 +268,21 @@ namespace xw { namespace md {
 #endif
 
             //reserve blocks
-            size_t maxBlock = 0x80000000ull; //2GB
             size_t minBlkSize = 64 * 4096; //64 pages
             size_t reservedSize = 0;
             size_t addressHint = 0x1000000ull; //experimental starting point
 
             // use reserving from os_mem_functions
             // doing atempts for simpler blocks if not found biggers
-            for (size_t size = maxBlock; size >= minBlkSize && reservedSize < MEMCORE_MAX_HEAP_SIZE; size /= 2){
+            for (size_t size = MEMCORE_MAX_HEAP_SIZE; size >= minBlkSize && reservedSize < MEMCORE_MAX_HEAP_SIZE; size /= 2){
 
                 addressHint = 0x1000000ull;
 
-                while(true){
+                while(reservedSize < MEMCORE_MAX_HEAP_SIZE){
                     XW_SCP_LOG_TRACE("Try to reserve block of -> " << size << " bytes from: " << addressHint);
 
                     size_t lastReserved = 0;
-                    void* p = xw::os::vm_reserve_31_bit((void*)addressHint, size, lastReserved, MEMCORE_MAX_HEAP_SIZE - reservedSize);
+                    void* p = xw::os::vm_reserve_limited((void*)addressHint, size, lastReserved, MEMCORE_MAX_HEAP_SIZE - reservedSize);
 
                     if (p == INVALID_PTR){
                         XW_SCP_LOG_TRACE("Reserving block of " << size << " form " << addressHint << " failed!");

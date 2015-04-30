@@ -34,7 +34,10 @@ set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_VERSION_FOR_FILE})
     
 set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
 
-SET (Boost_COMPILER -gcc48)
+if (not CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    SET (Boost_COMPILER -gcc48)
+endif()
+
 SET (Boost_FIND_REQUIRED ON)
 SET (Boost_FIND_QUIETLY ON)
 SET (Boost_DEBUG ON)

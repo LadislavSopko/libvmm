@@ -1,13 +1,10 @@
-cmake_minimum_required(VERSION 2.4.4)
+cmake_minimum_required (VERSION 3.1)
+set (CMAKE_BACKWARDS_COMPATIBILITY 3.1)
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 project(libvmm CXX)
 
-set(VERSION "1.14")
-
-#set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
-#set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
-#set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
+set(VERSION "1.0")
 
 add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
 add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)

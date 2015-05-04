@@ -5,6 +5,18 @@ project(libvmm CXX)
 
 set(VERSION "1.0")
 
+
+# address space limit
+# can be set full 32bit address (should give instability to lj)
+# for full 32bit call cmake with  -DXW_USE_FULL_32:bool=on
+if ( XW_USE_FULL_32 )
+    message(STATUS "Using 32bit addresses! VAS manager will try to reserve 3.5GB of bottom VAS.")
+else()
+    message(STATUS "Using 31bit addresses! VAS manager will try to reserve 2GB of bottom VAS.")
+    add_definitions(-D__LIMIT_TO_31_bit__)
+endif()
+
+
 add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
 add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

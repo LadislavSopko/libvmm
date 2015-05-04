@@ -18,8 +18,13 @@
 #include <vector>
 #include <string.h>
 
-//3.5GB
-#define MEMCORE_MAX_HEAP_SIZE 0xE0000000ull
+#if defined(__LIMIT_TO_31_bit__)
+    //2GB
+    #define MEMCORE_MAX_HEAP_SIZE 0x80000000ull
+#else
+    //3.5GB
+    #define MEMCORE_MAX_HEAP_SIZE 0xE0000000ull
+#endif
 
 //#define __xw__logign__
 

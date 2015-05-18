@@ -42,9 +42,11 @@ set (XW_BOOST_VERSION_FOR_FILE "1_57")
 
 set (XW_BOOST_DEPENDS system filesystem)
 
-set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_VERSION_FOR_FILE})
-    
-set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
+#handle boost as parto fo local build system if not defined before
+if (BOOST_ROOT STREQUAL "") 
+    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_VERSION_FOR_FILE})
+    set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
+endif ()
 
 if (NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
     SET (Boost_COMPILER -gcc48)

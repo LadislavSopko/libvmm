@@ -5,7 +5,7 @@
 #ifndef __os_mem_functions_hpp__
 #define __os_mem_functions_hpp__
 
-#if defined(__linux__) && ! defined(HW_UNIX)
+#if (defined(__linux__) || defined(__APPLE__)) && ! defined(HW_UNIX)
 #define HW_UNIX
 #endif
 
@@ -34,6 +34,10 @@
     #define LAST_MAPPABLE_ADDRESS   0xFFFFFFFFull
 #endif
 
+
+#if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
+#define MAP_ANONYMOUS       MAP_ANON
+#endif
 
 namespace xw { namespace os {
     
@@ -345,8 +349,8 @@ namespace xw { namespace os {
         // manage size take min
         size = availableSize > maxSize ? maxSize : availableSize;
 
-        //p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1 , 0);
-        p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1 , 0);
+        //p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1 , 0);
+        p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1 , 0);
         msync(p, size, MS_SYNC|MS_INVALIDATE);
 #endif
         if(p == INVALID_PTR){
@@ -396,9 +400,9 @@ namespace xw { namespace os {
             // manage size take min
             size = availableSize > maxSize ? maxSize : availableSize;
 
-            //void* p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1 , 0);
+            //void* p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1 , 0);
 
-            void* p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1 , 0);
+            void* p = mmap((void*)addressHint, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1 , 0);
             msync(p, size, MS_SYNC|MS_INVALIDATE);
 
             return (allocated = p != NULL ? size : 0, p);
@@ -421,7 +425,7 @@ namespace xw { namespace os {
         }
         return  stat == 0 ? ptr : INVALID_PTR;*/
 
-        void * tmpPtr = mmap(ptr, size, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_SHARED|MAP_ANON, -1, 0);
+        void * tmpPtr = mmap(ptr, size, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_SHARED|MAP_ANONYMOUS, -1, 0);
         msync(ptr, size, MS_SYNC|MS_INVALIDATE);
         return tmpPtr;
 #endif
@@ -440,7 +444,7 @@ namespace xw { namespace os {
         // the TLB to mark this as a new mapped area which, due to
         // demand paging, will not be committed until used.
 
-        mmap(ptr, size, PROT_NONE, MAP_FIXED|MAP_PRIVATE|MAP_ANON, -1, 0);
+        mmap(ptr, size, PROT_NONE, MAP_FIXED|MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
         msync(ptr, size, MS_SYNC|MS_INVALIDATE);
 #endif
     }

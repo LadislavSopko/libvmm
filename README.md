@@ -4,14 +4,16 @@ portable memory manager (Virtual address space level)
 This is proof of concept, maybe I'll develop it better if it works ....
 
 libvmm was developed for to patch current luajit-2.0.3 and its 1GB ram problem on 64bit platforms.
-My solution is portable (windows / linux) it support 2GB - 1 page of ram
+My solution is portable (windows / linux / MacOSx) it support 2GB - 1 page of ram
 
-I used this aproach:
+Special thanks to Stefan Hett for its MacOSx port
 
-- Reserve as much ram as possible VirtualAlloc/VirtualFree and company calls used in windows, and coresponding aproach in linux (http://blog.nervus.org/managing-virtual-address-spaces-with-mmap). 
+I used this approach:
+
+- Reserve as much ram as possible VirtualAlloc/VirtualFree and company calls used in windows, and corresponding approach in linux (http://blog.nervus.org/managing-virtual-address-spaces-with-mmap). 
 - Commit / Decommit of ram pages when luajit ask for ram
 
-Libvmm use page labeling in pages arena. FIn order to be as fast as possible, I used bit_array ported form code of Isaac Turner (url: https://github.com/noporpoise/BitArray/) I adapted it and ported it to windows just what I need. 
+Libvmm use page labeling in pages arena in order to be as fast as possible, I used bit_array ported form code of Isaac Turner (url: https://github.com/noporpoise/BitArray/) I adapted it and ported it to windows just what I need. 
 Using this method I have also full support for mmremap on windows.
 
 Platforms: 
@@ -22,7 +24,7 @@ Build and Install:
 
 in folder luajit-modify there are 2 files what you need copy to sources 
 in order to patch and build it (I tested it a bit, and it function 
-but im in early project stage, so dont blame me if somthing is not working ...)
+but im in early project stage, so dont blame me if something is not working ...)
 
 I work with luajit managed by luadist great project.
 
@@ -33,7 +35,7 @@ Install:
 2. clone luajit from https://github.com/LuaDist/luajit.git
 3. comy my files into sources of it
 4. build it.
-5. test it with test/L.lua (I took it from somwher ein the net, its mindless but it sucks allot of ram :)
+5. test it with test/L.lua (I took it from somewhere in the net, its mindless but it sucks allot of ram :)
 
 If you need help contact me: ladislav.sopko@gmail.com
 

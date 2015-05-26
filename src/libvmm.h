@@ -11,6 +11,7 @@
 #define DLL_EXPORT __declspec(dllexport)
 #endif
 
+DLL_EXPORT void laco_init();
 DLL_EXPORT void* laco_alloc(size_t size);
 DLL_EXPORT int laco_free(void* ptr, size_t size);
 DLL_EXPORT void* laco_realloc(void* ptr, size_t oldsize, size_t size);

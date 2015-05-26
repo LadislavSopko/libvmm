@@ -340,11 +340,15 @@ namespace xw { namespace os {
 #else
         size_t availableSize = size;
         //lets look for possible VAS big at least size bytes
-        void* addressHint = dtl::linux_get_first_free_block_limited(address_hint, availableSize, maxSize);
+        void* addressHint = address_hint;
+#ifndef __APPLE__
+ 		// /proc/self/map, is not available on Mac, therefore stick with address_hint in that case
+        addressHint = dtl::linux_get_first_free_block_limited(address_hint, availableSize, maxSize);
         if(addressHint == NULL){
             //not enough space for wanted size
             return (allocated = 0, INVALID_PTR);
         }
+#endif
 
         // manage size take min
         size = availableSize > maxSize ? maxSize : availableSize;

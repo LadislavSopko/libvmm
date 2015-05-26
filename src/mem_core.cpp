@@ -8,6 +8,9 @@
 #endif
 
 extern "C"{
+	DLL_EXPORT void laco_init(){
+		xw::md::SMemCore_factory().ref();
+	}
     DLL_EXPORT void* laco_alloc(size_t size){
         return xw::md::SMemCore_factory().ref().alloc_ram(size);
     }

@@ -5,7 +5,7 @@
 #ifndef __meme_core_hpp__
 #define __meme_core_hpp__
 
-#if defined(__linux__) && ! defined(HW_UNIX)
+#if (defined(__linux__) || defined(__APPLE__)) && ! defined(HW_UNIX)
 #define HW_UNIX
 #endif
 

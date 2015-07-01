@@ -1,4 +1,5 @@
-# libvmm
+libvmm
+==========
 portable memory manager (Virtual address space level)
 
 This is proof of concept, maybe I'll develop it better if it works ....
@@ -20,7 +21,8 @@ Platforms:
 
 linux / windows
 
-Build and Install:
+Build and Install
+=================
 
 in folder luajit-modify there are 2 files what you need copy to sources 
 in order to patch and build it (I tested it a bit, and it function 
@@ -39,4 +41,25 @@ Install:
 
 If you need help contact me: ladislav.sopko@gmail.com
 
+Contributing
+============
 
+Please feel free to submit issues and pull requests. I appreciate bug reports.
+
+
+License
+=======
+
+This software is in the *Public Domain*. That means you can do whatever you like
+with it. That includes being used in proprietary products without attribution or
+restrictions. There are no warranties and there may be bugs. 
+
+Formally we are using CC0 - a Creative Commons license to place this work in the
+public domain. A copy of CC0 is in the LICENSE file. 
+
+    "CC0 is a public domain dedication from Creative Commons. A work released
+    under CC0 is dedicated to the public domain to the fullest extent permitted
+    by law. If that is not possible for any reason, CC0 also provides a lax,
+    permissive license as a fallback. Both public domain works and the lax
+    license provided by CC0 are compatible with the GNU GPL."
+      - http://www.gnu.org/licenses/license-list.html#CC0

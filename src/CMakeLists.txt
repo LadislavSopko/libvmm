@@ -36,14 +36,37 @@ endmacro()
 # ---------- Find Boost Headers/Libraries -----------------------
 set (XW_3RDP_ROOT ${CMAKE_INSTALL_PREFIX})
 
-set (XW_BOOST_VERSION "1.57")
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
-set (XW_BOOST_VERSION_FOR_FILE "1_57")
+    if( "${VC_VERSION}" STREQUAL "" )
+    
+        set ( VC_VERSION 10 )
+    
+    endif()
+
+    if( "${VC_VERSION}" STREQUAL "14" )
+        #boost version
+        set (XW_BOOST_VERSION "1.59")
+		set (XW_BOOST_VERSION_FOR_FILE "1_59")
+		
+    else()
+        #boost version
+        set (XW_BOOST_VERSION "1.57")
+		set (XW_BOOST_VERSION_FOR_FILE "1_57")
+    endif()
+
+else()
+    #boost version
+    set (XW_BOOST_VERSION "1.57")
+	set (XW_BOOST_VERSION_FOR_FILE "1_57")
+endif()
+
+
 
 set (XW_BOOST_DEPENDS system filesystem)
 
 #handle boost as part of local build system if not defined before
-if (BOOST_ROOT STREQUAL "") 
+if ("${BOOST_ROOT}" STREQUAL "") 
     set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_VERSION_FOR_FILE})
     set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
 endif ()

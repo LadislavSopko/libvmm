@@ -33,7 +33,7 @@ macro(set_lib_names target)
     
 endmacro()
 
-# ---------- Find Boost Headers/Libraries -----------------------
+# ---------- Set MS Visual version -----------------------
 set (XW_3RDP_ROOT ${CMAKE_INSTALL_PREFIX})
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -44,30 +44,18 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     
     endif()
 
-    if( "${VC_VERSION}" STREQUAL "14" )
-        #boost version
-        set (XW_BOOST_VERSION "1.59")
-		set (XW_BOOST_VERSION_FOR_FILE "1_59")
-		
-    else()
-        #boost version
-        set (XW_BOOST_VERSION "1.57")
-		set (XW_BOOST_VERSION_FOR_FILE "1_57")
-    endif()
-
-else()
-    #boost version
-    set (XW_BOOST_VERSION "1.57")
-	set (XW_BOOST_VERSION_FOR_FILE "1_57")
 endif()
 
-
+# ---------- Find Boost Headers/Libraries -----------------------
+set (XW_BOOST_MAJOR_VERSION 1 )
+set (XW_BOOST_MINOR_VERSION 59)
+set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}" ) 
 
 set (XW_BOOST_DEPENDS system filesystem)
 
 #handle boost as part of local build system if not defined before
 if ("${BOOST_ROOT}" STREQUAL "") 
-    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_VERSION_FOR_FILE})
+    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_MAJOR_VERSION}_${XW_BOOST_MINOR_VERSION})
     set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
 endif ()
 

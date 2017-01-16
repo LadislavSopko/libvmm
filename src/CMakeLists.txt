@@ -40,7 +40,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
     if( "${VC_VERSION}" STREQUAL "" )
     
-        set ( VC_VERSION 10 )
+        set ( VC_VERSION 14 )
     
     endif()
 
@@ -48,7 +48,7 @@ endif()
 
 # ---------- Find Boost Headers/Libraries -----------------------
 set (XW_BOOST_MAJOR_VERSION 1 )
-set (XW_BOOST_MINOR_VERSION 59)
+set (XW_BOOST_MINOR_VERSION 63)
 set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}" ) 
 
 set (XW_BOOST_DEPENDS system filesystem)

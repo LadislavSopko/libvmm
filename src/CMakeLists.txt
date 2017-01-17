@@ -48,7 +48,7 @@ endif()
 
 # ---------- Find Boost Headers/Libraries -----------------------
 set (XW_BOOST_MAJOR_VERSION 1 )
-set (XW_BOOST_MINOR_VERSION 63)
+set (XW_BOOST_MINOR_VERSION 59)
 set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}" ) 
 
 set (XW_BOOST_DEPENDS system filesystem)

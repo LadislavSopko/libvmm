@@ -11,18 +11,24 @@ if(XW_BUILD_LIBVMM)
     set(CMAKE_INSTALL_PREFIX "${XW_3RDP_ROOT}")
     # xw includes
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../..)
+    
+    
+    # turn on/off zwssock handling since 18/07/2016
+    set ( LIBVMM_XWLOGGING ON CACHE BOOL "On of we need xw logging." )
+    if(LIBVMM_XWLOGGING)
+        add_definitions(-D__xw__logign__)
+        add_definitions(-DXW_LITTLEENDIAN)
+        add_definitions(-D_ENABLE_ATOMIC_ALIGNMENT_FIX)
+        add_definitions(-DBOOST_ALL_NO_LIB)
+        add_definitions(-DBOOST_ALL_DYN_LINK)
+        add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
+    endif()
+else()
+    set ( LIBVMM_XWLOGGING OFF CACHE BOOL "On of we need xw logging. (must be build in xwee tree)" )    
 endif() 
 
-# turn on/off zwssock handling since 18/07/2016
-set ( LIBVMM_XWLOGGING ON CACHE BOOL "On of we need xw logging." )
-if(LIBVMM_XWLOGGING)
-    add_definitions(-D__xw__logign__)
-    add_definitions(-DXW_LITTLEENDIAN)
-    add_definitions(-D_ENABLE_ATOMIC_ALIGNMENT_FIX)
-    add_definitions(-DBOOST_ALL_NO_LIB)
-    add_definitions(-DBOOST_ALL_DYN_LINK)
-    add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
-endif()
+
+
 
 # address space limit
 # can be set full 32bit address (should give instability to lj)

@@ -6,6 +6,24 @@ project(libvmm CXX)
 set(VERSION "1.0")
 
 
+
+if(XW_BUILD_LIBVMM)
+    set(CMAKE_INSTALL_PREFIX "${XW_3RDP_ROOT}")
+    # xw includes
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../..)
+endif() 
+
+# turn on/off zwssock handling since 18/07/2016
+set ( LIBVMM_XWLOGGING ON CACHE BOOL "On of we need xw logging." )
+if(LIBVMM_XWLOGGING)
+    add_definitions(-D__xw__logign__)
+    add_definitions(-DXW_LITTLEENDIAN)
+    add_definitions(-D_ENABLE_ATOMIC_ALIGNMENT_FIX)
+    add_definitions(-DBOOST_ALL_NO_LIB)
+    add_definitions(-DBOOST_ALL_DYN_LINK)
+    add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
+endif()
+
 # address space limit
 # can be set full 32bit address (should give instability to lj)
 # for full 32bit call cmake with  -DXW_USE_FULL_32:bool=on
@@ -82,11 +100,11 @@ endif()
 #============================================================================
 
 set(libvmm_HDRS_complie
-    ${CMAKE_CURRENT_SOURCE_DIR}/xw-incl/cntrs/bit-array.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xw-incl/os/os_mem_functions.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xw-incl/cpp/phoenix.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xw-incl/cpp/terminable_base.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/xw-incl/cpp/type_traits.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/incl/cntrs/bit-array.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/incl/os/os_mem_functions.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/incl/cpp/phoenix.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/incl/cpp/terminable_base.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/incl/cpp/type_traits.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mem_core.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dllmain.h
 )    
@@ -109,7 +127,23 @@ target_link_libraries (libvmm
     ${Boost_FILESYSTEM_LIBRARY}       
 )
 
+if(LIBVMM_XWLOGGING)
+   if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+       target_link_libraries (libvmm  
+           xwee
+       )
+   endif()
+endif()
+
+
 set_lib_names(libvmm)
+
+#if builded inside xwee src tree use also this
+if(XW_BUILD_LIBVMM)
+    set_bindir_properties(libvmm)
+endif()
+
+
 
 if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
     install(TARGETS libvmm

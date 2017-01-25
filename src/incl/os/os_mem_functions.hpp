@@ -333,7 +333,7 @@ namespace xw { namespace os {
         DWORD olderr = GetLastError();
         SetLastError(0);
         p = VirtualAlloc(addressHint, size, MEM_RESERVE, PAGE_NOACCESS);
-        DWORD err = GetLastError();
+        //DWORD err = GetLastError();
         SetLastError(olderr);
 
 
@@ -462,7 +462,7 @@ namespace xw { namespace os {
             DWORD olderr = GetLastError();
             SetLastError(0);
             void* r = VirtualAlloc(addressHint, size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-            DWORD err = GetLastError();
+            //DWORD err = GetLastError();
             SetLastError(olderr);            
             return r;
         }

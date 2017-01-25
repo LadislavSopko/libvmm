@@ -16,7 +16,7 @@
 
 #include <stdlib.h> // atexit()
 #include <iostream> // cout/cerr
-#include <xw-incl/cpp/terminable_base.hpp>
+#include <incl/cpp/terminable_base.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/utility.hpp>
 

@@ -5,18 +5,50 @@
 #ifndef __meme_core_hpp__
 #define __meme_core_hpp__
 
+#include <iostream>
+#include <vector>
+#include <string.h>
+
+#include <boost/cstdint.hpp>
+
 #if (defined(__linux__) || defined(__APPLE__)) && ! defined(HW_UNIX)
 #define HW_UNIX
 #endif
 
+//#define __xw__logign__
 
-#include <xw-incl/os/os_mem_functions.hpp>
-#include <xw-incl/cntrs/bit-array.hpp>
-#include <xw-incl/cpp/phoenix.hpp>
-#include <boost/cstdint.hpp>
-#include <iostream>
-#include <vector>
-#include <string.h>
+#if defined(__xw__logign__)
+	#include <xwee/iglobals.hpp>
+	// now we force class loader form root xwee.exe
+	#define XW_GET_MASTER_CLASS_LOADER() xw::getGlobals().getClassLoader()
+	// now if we handle root class loader macro override we can start 
+	#include <xw-incl/log/logging.hpp>
+#else
+	#define XW_INIT_LOGGING()
+	#define XW_LOG(__logger1, __kind1, __msg1)
+	#define XW_LOG_TRACE(__logger1, __msg1)
+	#define XW_LOG_DEBUG(__logger1, __msg1)
+	#define XW_LOG_INFO(__logger1, __msg1)
+	#define XW_LOG_WARN(__logger1, __msg1)
+	#define XW_LOG_ERROR(__logger1, __msg1)
+	#define XW_LOG_FATAL(__logger1, __msg1)
+	#define XW_SCP_LOG_INIT(__logger_name)
+	#define XW_SCP_LOG(__kind1, __msg1)
+	#define XW_SCP_LOG_TRACE(__msg1)
+	#define XW_SCP_LOG_DEBUG(__msg1)
+	#define XW_SCP_LOG_INFO(__msg1)
+	#define XW_SCP_LOG_WARN(__msg1)
+	#define XW_SCP_LOG_ERROR(__msg1)
+	#define XW_SCP_LOG_FATAL(__msg1)
+	#define XW_SHORT_LOG(__logger_name, __kind1, __msg1)
+#endif
+
+
+
+#include <incl/os/os_mem_functions.hpp>
+#include <incl/cntrs/bit-array.hpp>
+#include <incl/cpp/phoenix.hpp>
+
 
 #if defined(__LIMIT_TO_31_bit__)
     //2GB
@@ -26,33 +58,7 @@
     #define MEMCORE_MAX_HEAP_SIZE 0xE0000000ull
 #endif
 
-//#define __xw__logign__
 
-#if defined(__xw__logign__)
-
-#include <xw-incl/log/logging.hpp>
-
-#else
-
-#define XW_INIT_LOGGING()
-#define XW_LOG(__logger1, __kind1, __msg1)
-#define XW_LOG_TRACE(__logger1, __msg1)
-#define XW_LOG_DEBUG(__logger1, __msg1)
-#define XW_LOG_INFO(__logger1, __msg1)
-#define XW_LOG_WARN(__logger1, __msg1)
-#define XW_LOG_ERROR(__logger1, __msg1)
-#define XW_LOG_FATAL(__logger1, __msg1)
-#define XW_SCP_LOG_INIT(__logger_name)
-#define XW_SCP_LOG(__kind1, __msg1)
-#define XW_SCP_LOG_TRACE(__msg1)
-#define XW_SCP_LOG_DEBUG(__msg1)
-#define XW_SCP_LOG_INFO(__msg1)
-#define XW_SCP_LOG_WARN(__msg1)
-#define XW_SCP_LOG_ERROR(__msg1)
-#define XW_SCP_LOG_FATAL(__msg1)
-#define XW_SHORT_LOG(__logger_name, __kind1, __msg1)
-
-#endif
 
 namespace xw { namespace md {
 /*

@@ -10,7 +10,7 @@
 #ifndef XW_INCL_CNTR_BIT_ARRAY_HPP_
 #define XW_INCL_CNTR_BIT_ARRAY_HPP_
 
-#include <xw-incl/os/os_mem_functions.hpp>
+#include <incl/os/os_mem_functions.hpp>
 #include <boost/cstdint.hpp>
 #include <exception>
 #include <iostream>
@@ -51,7 +51,9 @@
 #define leading_zeros(_r, x) ((x) ? (__typeof(x))__builtin_clzll(x) : (__typeof(x))sizeof(x)*8)
 #endif
 
-#define XW_DEFINE_FAST_EXCEPTION(name) class name : public std::exception{}
+#if !defined(XW_DEFINE_FAST_EXCEPTION)
+	#define XW_DEFINE_FAST_EXCEPTION(name) class name : public std::exception{}
+#endif
 #define XW_THROW_FAST_IF_NOT_CHECK(_fc, type) {if (!(_fc)) {throw type();}}
 
 namespace xw { namespace cntrs {

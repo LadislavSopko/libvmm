@@ -24,7 +24,7 @@ if(XW_BUILD_LIBVMM)
         add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
     endif()
 else()
-    set ( LIBVMM_XWLOGGING OFF CACHE BOOL "On of we need xw logging. (must be build in xwee tree)" )    
+    set ( LIBVMM_XWLOGGING OFF CACHE BOOL "On of we need xw logging. (must be build in xwee tree)" FORCE )    
 endif() 
 
 

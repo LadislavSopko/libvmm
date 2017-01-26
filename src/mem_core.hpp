@@ -374,7 +374,7 @@ namespace xw { namespace md {
                 switch(state){
                 case 0:
                     _allocated_space += (size - oldsize);
-                    XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space);
+                    XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space << "\tFree:" << (_reservedSize - _allocated_space));
                     XW_SCP_LOG_TRACE("Realloc request success -> " << (size_t)ret << " from block:" << cnt);
                     return ret;
                 case 1:
@@ -390,7 +390,7 @@ namespace xw { namespace md {
                                 free_ram(ptr, oldsize);
 
                                 _allocated_space += (size - oldsize);
-                                XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space);
+                                XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space << "\tFree:" << (_reservedSize - _allocated_space));
 
                                 XW_SCP_LOG_TRACE("Realloc request success doing move to -> " << (size_t)newPtr);
                                 return newPtr;
@@ -415,7 +415,7 @@ namespace xw { namespace md {
                 boost::int32_t ret = (*it)->free(ptr, size); 
                 if( ret > 0 ){
                     _allocated_space -= ret;
-                    //XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space);
+                    XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space << "\tFree:" << (_reservedSize - _allocated_space));
 
                     XW_SCP_LOG_TRACE("Free request success -> " << (size_t)ptr << " from block:" << cnt);
                     return true;

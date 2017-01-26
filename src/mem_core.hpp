@@ -310,7 +310,7 @@ namespace xw { namespace md {
 
             //total reserved ram
             XW_SCP_LOG_TRACE("Reserved ram -> " << reservedSize << " in " << (size_t)_blocks.size() << " blocks.");
-
+			_reservedSize = reservedSize;
             //ram_dmp();
         }
 
@@ -338,7 +338,7 @@ namespace xw { namespace md {
                 if(ret){ 
                     XW_SCP_LOG_TRACE("Alloc request success -> " << (size_t)ret << " from block:" << cnt);
                     _allocated_space += size;
-                    XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space);
+                    XW_SHORT_LOG("LuaJitVMM", xw::log::kindTrace, "S\t" << _allocated_space << "\tFree:" << (_reservedSize - _allocated_space));
                     return ret;
                 }
                 ++cnt;

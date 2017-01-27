@@ -153,7 +153,7 @@ namespace xw { namespace md {
                     //shrink original, freeing some pages from the end
                     void* unCommitFrom = (void*)((size_t)ptr + (newNeedPages * _pageSize));
                     
-                    xw::os::vm_release(unCommitFrom, (needPages - newNeedPages) * _pageSize);
+                    xw::os::vm_uncommit(unCommitFrom, (needPages - newNeedPages) * _pageSize);
 
                     _bm.unset_region(startIndex + newNeedPages, needPages - newNeedPages);
 
@@ -173,10 +173,10 @@ namespace xw { namespace md {
                         void* ret = xw::os::vm_commit(commitFrom, pagesForCommit * _pageSize);
 
                         if(ret != NULL){
-                            _bm.unset_region(startIndex + needPages, newNeedPages - needPages);
+                            _bm.set_region(startIndex + needPages, newNeedPages - needPages);
                         }else{
-                            XW_SCP_LOG_ERROR("R+\t" << (size_t)ptr << "\tCOMMIT");
-                            return (*result = NULL, -1); //can't uncommit
+                            XW_SCP_LOG_ERROR("R+\t" << (size_t)ptr << "\tCANT COMMIT");
+                            return (*result = NULL, -1); //can't commit
                         }                        
 
                         XW_SCP_LOG_TRACE("R+\t" << (size_t)ptr << "\t" << newNeedPages - needPages << "\t(" << needPages << "->" << newNeedPages);

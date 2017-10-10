@@ -143,19 +143,25 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
 endif()
 
+
 # ---------- Find Boost Headers/Libraries -----------------------
 set (XW_BOOST_MAJOR_VERSION 1 )
 set (XW_BOOST_MINOR_VERSION 65)
 set (XW_BOOST_PATCH_VERSION 1)
-set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}.${XW_BOOST_PATCH_VERSION}" )
+set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}.${XW_BOOST_PATCH_VERSION}" ) 
 
 set (XW_BOOST_DEPENDS system unit_test_framework filesystem thread date_time)
 
-set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_MAJOR_VERSION}_${XW_BOOST_MINOR_VERSION}_${XW_BOOST_PATCH_VERSION})
-    
-set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
+#handle boost as part of local build system if not defined before
+if ("${BOOST_ROOT}" STREQUAL "") 
+    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_MAJOR_VERSION}_${XW_BOOST_MINOR_VERSION}_${XW_BOOST_PATCH_VERSION})
+    set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
+endif ()
 
-SET (Boost_COMPILER -gcc48)
+if (NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    SET (Boost_COMPILER -gcc48)
+endif()
+
 SET (Boost_FIND_REQUIRED ON)
 SET (Boost_FIND_QUIETLY ON)
 SET (Boost_DEBUG ON)

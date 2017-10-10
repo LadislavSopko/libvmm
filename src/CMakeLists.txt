@@ -72,14 +72,15 @@ endif()
 
 # ---------- Find Boost Headers/Libraries -----------------------
 set (XW_BOOST_MAJOR_VERSION 1 )
-set (XW_BOOST_MINOR_VERSION 59)
-set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}" ) 
+set (XW_BOOST_MINOR_VERSION 65)
+set (XW_BOOST_BUILD_VERSION 1)
+set (XW_BOOST_VERSION "${XW_BOOST_MAJOR_VERSION}.${XW_BOOST_MINOR_VERSION}.${XW_BOOST_MINOR_VERSION}" ) 
 
 set (XW_BOOST_DEPENDS system filesystem)
 
 #handle boost as part of local build system if not defined before
 if ("${BOOST_ROOT}" STREQUAL "") 
-    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_MAJOR_VERSION}_${XW_BOOST_MINOR_VERSION})
+    set (BOOST_ROOT ${XW_3RDP_ROOT}/include/boost-${XW_BOOST_MAJOR_VERSION}_${XW_BOOST_MINOR_VERSION}_${XW_BOOST_MINOR_VERSION})
     set (BOOST_LIBRARYDIR ${XW_3RDP_ROOT}/lib)
 endif ()
 
